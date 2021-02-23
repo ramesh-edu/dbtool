@@ -1,0 +1,106 @@
+'''
+Created on Feb 21 2021
+@author: ramesh gopisetty
+@Version history: 1.0
+'''
+
+from sqlqueries import useractivity
+from lib import PgOp
+from lib import usercheck
+
+import datetime
+import logging
+import csv
+import json
+import sys
+import argparse
+import os
+import traceback
+
+
+if __name__ == "__main__":
+
+
+    defaultlogfile='logfile_dbshipt_'+datetime.datetime.today().strftime("%d%m%Y%H%M%S")+'.log'
+    defaultoutfile='outfile_dbshipt_'+datetime.datetime.today().strftime("%d%m%Y%H%M%S")+'.txt'
+
+    parser = argparse.ArgumentParser(description='This program provides command line tool for the postgres activity')
+
+    parser.add_argument('-u', action='store', dest='user',
+                        help='Store the username')
+
+    parser.add_argument('-l', action='store', dest='logfile',
+                        default=defaultlogfile ,
+                        help='Store the logfile')
+
+    parser.add_argument('-d', action='store', dest='debuglevel',
+                        default='logging.INFO',
+                        help='Debug Level')
+
+    parser.add_argument('-f', action='store', dest='confile',
+                        help='Postgres Databases connection information file')
+
+    parser.add_argument('-o', action='store', dest='outputfile',
+                        default=defaultoutfile,
+                        help='Output Status File')                    
+
+    input_param = parser.parse_args()
+
+    if input_param.logfile:
+
+        logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(name)s %(levelname)s:%(message)s',
+                            filename=input_param.logfile, datefmt='%m/%d/%Y %I:%M:%S %p',
+                            filemode='w')
+                            
+    if input_param.debuglevel == 'DEBUG':
+        logging.getLogger().setLevel(logging.DEBUG)
+        logging.info('logging changed to the DEBUG level')
+    else:    
+        logging.getLogger().setLevel(logging.INFO)
+
+    pathname = os.path.dirname(sys.argv[0])        
+    abspath=os.path.abspath(pathname) 
+
+    if input_param.confile is None:
+        logging.error('Connection file not provided')
+
+
+    if input_param.user is  None:
+        logging.error('Username not provided to validate')
+
+
+    file1 = open(input_param.outputfile, "w") 
+    file1.write('Database User Validations  \n')
+    file1.close()
+
+
+    with open(input_param.confile) as file_in:
+        lines = []
+        for line in file_in:
+            try:
+                sline=line.split(';')
+                hostname=sline[2].split('=')[1]
+                dbname=sline[4].split('=')[1]
+                port=sline[3].split('=')[1]
+                suser=sline[0].split('=')[1]
+                pwd=sline[1].split('=')[1]
+
+                logging.debug(hostname)
+                logging.debug(port)
+                logging.debug(dbname)
+                logging.debug(suser)
+                logging.debug(pwd)
+
+                cpg=PgOp(hostname,port,dbname)
+                cpg.entry(suser,pwd) 
+
+                usercheck(pg=cpg,user=input_param.user,outfile=input_param.outputfile,db=dbname)
+
+            except Exception as e:
+
+                logging.info('Error in processing one connection;  The connection details are ')
+                logging.info(line)            
+                logging.info('Failed Please verify the error')
+                logging.info(e)
+                logging.info("Exception has occured" ,exc_info=1)
+                continue;
