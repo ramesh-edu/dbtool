@@ -1,0 +1,77 @@
+02/23/2021 08:32:47 AM root INFO:logging changed to the DEBUG level
+02/23/2021 08:32:47 AM root DEBUG:test.chfncrsmpvoe.us-east-1.rds.amazonaws.com
+02/23/2021 08:32:47 AM root DEBUG:5432
+02/23/2021 08:32:47 AM root DEBUG:test
+02/23/2021 08:32:47 AM root DEBUG:sadmin
+02/23/2021 08:32:47 AM root DEBUG:admin123
+02/23/2021 08:32:47 AM Connection DEBUG:test.chfncrsmpvoe.us-east-1.rds.amazonaws.com:5432/test
+02/23/2021 08:32:47 AM root INFO:You are in the usercheck module
+02/23/2021 08:32:47 AM Connection DEBUG: Executing the statement
+    select
+        rolname
+        ,rolcanlogin
+        ,rolcreatedb
+    from
+        pg_roles
+     where rolname='test'
+02/23/2021 08:32:47 AM Connection DEBUG: Executing the statement
+    select
+        nsp.nspname as SchemaName
+        ,cls.relname as ObjectName
+        ,rol.rolname as ObjectOwner
+        ,case cls.relkind
+            when 'r' then 'TABLE'
+            when 'm' then 'MATERIALIZED_VIEW'
+            when 'i' then 'INDEX'
+            when 'S' then 'SEQUENCE'
+            when 'v' then 'VIEW'
+            when 'c' then 'TYPE'
+            else cls.relkind::text
+        end as ObjectType
+    from pg_class cls
+    join pg_roles rol
+        on rol.oid = cls.relowner
+    join pg_namespace nsp
+        on nsp.oid = cls.relnamespace
+    where nsp.nspname not in ('information_schema', 'pg_catalog')
+        and nsp.nspname not like 'pg_toast%'
+     and  rol.rolname='test'
+02/23/2021 08:32:47 AM root INFO:No Objects found for that user
+02/23/2021 08:32:47 AM root DEBUG:test.chfncrsmpvoe.us-east-1.rds.amazonaws.com
+02/23/2021 08:32:47 AM root DEBUG:5432
+02/23/2021 08:32:47 AM root DEBUG:test
+02/23/2021 08:32:47 AM root DEBUG:sadmin
+02/23/2021 08:32:47 AM root DEBUG:admin123
+02/23/2021 08:32:47 AM Connection DEBUG:test.chfncrsmpvoe.us-east-1.rds.amazonaws.com:5432/test
+02/23/2021 08:32:47 AM root INFO:You are in the usercheck module
+02/23/2021 08:32:47 AM Connection DEBUG: Executing the statement
+    select
+        rolname
+        ,rolcanlogin
+        ,rolcreatedb
+    from
+        pg_roles
+     where rolname='test'
+02/23/2021 08:32:47 AM Connection DEBUG: Executing the statement
+    select
+        nsp.nspname as SchemaName
+        ,cls.relname as ObjectName
+        ,rol.rolname as ObjectOwner
+        ,case cls.relkind
+            when 'r' then 'TABLE'
+            when 'm' then 'MATERIALIZED_VIEW'
+            when 'i' then 'INDEX'
+            when 'S' then 'SEQUENCE'
+            when 'v' then 'VIEW'
+            when 'c' then 'TYPE'
+            else cls.relkind::text
+        end as ObjectType
+    from pg_class cls
+    join pg_roles rol
+        on rol.oid = cls.relowner
+    join pg_namespace nsp
+        on nsp.oid = cls.relnamespace
+    where nsp.nspname not in ('information_schema', 'pg_catalog')
+        and nsp.nspname not like 'pg_toast%'
+     and  rol.rolname='test'
+02/23/2021 08:32:47 AM root INFO:No Objects found for that user
