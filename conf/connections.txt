@@ -1,1 +1,2 @@
-
+User_Id=sadmin;Password=admin123;Host=test.chfncrsmpvoe.us-east-1.rds.amazonaws.com;Port=5432;Database=test;Pooling=true;Min_Pool_Size=0;Max_Pool_Size=100;Connection_Lifetime=0;
+User_Id=sadmin;Password=admin123;Host=test.chfncrsmpvoe.us-east-1.rds.amazonaws.com;Port=5432;Database=test;Pooling=true;Min_Pool_Size=0;Max_Pool_Size=100;Connection_Lifetime=0;
